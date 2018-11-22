@@ -4,30 +4,27 @@ Component({
    * 组件的属性列表
    */
   properties: {
+    user_goods:{
+    type: Object,
+    
+    observer: function (newVal) {
+      this.setData({
+        user_goods,
+      })
+    }
+    }
+   
+    
     
 
-    classic: {
-      type: Object,
-      observer: function(newVal) {
-        if (newVal) {
-          var typeText = {
-            100: "电影",
-            200: "音乐",
-            300: "句子"
-          }[newVal.type]
-        }
-        this.setData({
-          typeText
-        })
-      }
-    }
+    
   },
 
   /**
    * 组件的初始数据
    */
   data: {
-    typeText:''
+    user_goods:''
   },
 
   /**

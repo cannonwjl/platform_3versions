@@ -64,26 +64,7 @@ Page({
       'task.price': e.detail.value
     })
   },
-  // // 设置物品地点
-  // chooseLocation: function () {
-  //   var that = this;
 
-  //   wx.chooseLocation({
-  //     success: function (res) {
-  //       that.setData({
-  //         'task.address': res.address,
-  //         'task.latitude': res.latitude,
-  //         'task.longitude': res.longitude
-  //       })
-  //     },
-  //     fail: function () {
-  //       // fail
-  //     },
-  //     complete: function () {
-  //       // complete
-  //     }
-  //   })
-  // },
 
   // 设置打卡时间
   setSignTime: function (e) {
@@ -134,14 +115,14 @@ Page({
         wx.hideToast();
         // 在返回结果中会包含新创建的记录的 _id
         wx.showToast({
-          title: '新增记录成功',
+          title: '上传成功',
         })
         console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
       },
       fail: err => {
         wx.showToast({
           icon: 'none',
-          title: '新增记录失败'
+          title: '上传失败'
         })
         console.error('[数据库] [新增记录] 失败：', err)
       }
@@ -185,7 +166,11 @@ Page({
         })
         //this.uploadImg()
         this.onAdd();
+        wx.switchTab({
+          url: '/pages/my/my',
+        })
       })
+
   },
 
   //获取本地图片信息
@@ -262,11 +247,7 @@ Page({
     var now = new Date();
     var openId = wx.getStorageSync('openId');
 
-    // // 初始化打卡时间
-    // that.setData({
-    //   'task.signTime': util.getHM(now),
-    //   'task.signEarlyTime': util.getHM(new Date(now.getTime() - 1000 * 3600 * 2))
-    // });
+ 
 
     // 初始化日期
     that.setData({

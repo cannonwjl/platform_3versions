@@ -122,5 +122,11 @@ Page({
     wx.navigateTo({
       url: `/pages/classic-detail/classic-detail?cid=${cid}&type=${type}`
     })
+  },
+
+  onJumpToMyGoods(){
+    wx.navigateTo({
+      url: '/pages/goods-detail/goods-detail',
+    })
   }
 })

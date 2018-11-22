@@ -1,0 +1,8 @@
+<view catch:tap="onTap" class="container">
+  <view class="head">
+    <v-tag text="{{user_goods.goods_name}}" tag-class="tag" />
+    <v-like class="like" read-only="{{true}}" like="{{true}}" count="{{user_goods.price}}" />
+  </view>
+  <image class="{{other-img}}" src="{{user_goods.fileid}}"></image>
+  <view class="text">{{user_goods.createdAT}}</view>
+</view>
