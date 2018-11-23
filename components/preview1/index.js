@@ -4,13 +4,14 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    user_goods:{
-    type: Object,
+    usergoods:{
+    type: [],
     
-    observer: function (newVal) {
+      observer: function (usergoods) {
       this.setData({
-        user_goods,
+        usergoods,
       })
+      
     }
     }
    
@@ -24,7 +25,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-    user_goods:''
+    usergoods:''
   },
 
   /**

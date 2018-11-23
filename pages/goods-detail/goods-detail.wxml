@@ -1,10 +1,13 @@
 
-  <view class="like-container">
+  <view wx:if="{{modalHidden}}" class="like-container">
     <image class="headline" src="/images/my/goods.png" />
-    <text>{{user_goods[0]}}</text>
     <view class="preview-container">
-      <block wx:for="{{user_goods}}" wx:key="{{user_goods}}">
-        <v-preview1 bind:tapping="onJumpToDetail" class="preview" classic="{{item}}" />
+      <block wx:for="{{usergoods}}" wx:key="">
+        <v-preview1 bind:tapping="onJumpToDetail" class="preview" usergoods="{{item}}" />
       </block>
     </view>
   </view>
+
+<view wx:else><text>
+  没任何物品
+</text></view>

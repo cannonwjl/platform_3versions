@@ -43,7 +43,7 @@
 .text{
   padding:30rpx;
   font-size:28rpx;
-  height:130rpx;
+  height:10rpx;
   color:#666666;
   overflow: hidden;
 }

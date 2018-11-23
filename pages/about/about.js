@@ -186,8 +186,7 @@ Page({
   },
 
   onShow: function() {
-    // 恢复新建按钮状态
-    
+   
     this.setData({
       'creating': false,
     });
@@ -230,7 +229,6 @@ Page({
 
     that._getOnQuery('user_table', '')
       .then(res => {
-        
         if(res=="")
         {
           //如果查询不到东西 按键显示字符“新建”

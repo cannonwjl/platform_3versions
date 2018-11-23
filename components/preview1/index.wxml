@@ -1,8 +1,12 @@
 <view catch:tap="onTap" class="container">
+ 
   <view class="head">
-    <v-tag text="{{user_goods.goods_name}}" tag-class="tag" />
-    <v-like class="like" read-only="{{true}}" like="{{true}}" count="{{user_goods.price}}" />
+    <v-tag text="{{usergoods.goods_name}}" tag-class="tag" />
+    <v-like class="like" read-only="{{true}}" like="{{true}}" count="111" />
   </view>
-  <image class="{{other-img}}" src="{{user_goods.fileid}}"></image>
-  <view class="text">{{user_goods.createdAT}}</view>
+  <image class="other-img" mode='scaleToFill' src="{{usergoods.fileid}}"></image>
+  <view class="text">价格：{{usergoods.price}}</view>
+  <view class="text">介绍：{{usergoods.introdution}}</view>
+  <view class="text">日期：{{usergoods.createdAT}}</view>
+  
 </view>

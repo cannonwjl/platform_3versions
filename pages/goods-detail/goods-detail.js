@@ -33,13 +33,13 @@ Page({
       price: Number,
       ACL: 0,
     },
-    user_goods:[],
+   
+    usergoods:[],
     openid: '',
     userInfo: {},
-    creating: false,
-    modalHidden: true,
-    classics: null,
-    todos_user: [],
+ 
+    modalHidden: false,  //如果数据没加载完毕这隐藏界面
+
   },
 
   _getOnQuery(DB, where) {
@@ -50,22 +50,16 @@ Page({
 
 
   // 初始化设置
-  onLoad: function () {
-    
-    var that=this
+  onLoad: function (options) {
+
     wx.showLoading() //加载loading
+    var that=this
+ 
     var appopenid = getApp().globalData.openid;
       this.setData({
         openid: getApp().globalData.openid
       })
-    // 初始化昵称
-    app.getUserInfo(function (userInfo) {
-      //更新数据
-      that.setData({
-        userInfo: userInfo
-      })
-    })
-   console.log(this.data)
+ 
     that._getOnQuery('goods_table', '')
       .then(res => {
 
@@ -73,13 +67,10 @@ Page({
            res=""
         }
         else {
-          console.log('data:->', this.data)
-          console.log('获取', res[0]._openid)
-          console.log('用户', this.data.openid)
-
           if (res[0]._openid == this.data.openid) {
-         
+          
           }
+          
           wx.hideLoading()
         }
 
@@ -87,10 +78,7 @@ Page({
 
   },
 
-  onShow(options) {
-    console.log("this is show function:"+this.data.user_goods.data)
-  },
-
+ 
 
 
   onJumpToAbout(event) {
@@ -106,14 +94,19 @@ Page({
   },
 
   onJumpToDetail(event) {
-    const cid = event.detail.cid
-    const type = event.detail.type
+    const id = event.detail._id
+    const openid = event.detail._openid
+    console.log("--id" +id+"--openid"+openid)
     wx.navigateTo({
-      url: `/pages/classic-detail/classic-detail?cid=${cid}&type=${type}`
+      url: `/pages/course/course?id=${id}&openid=${openid}`
     })
   },
 
- 
+  onShow() {
+    console.log("this is show function:" + this.data.usergoods)
+
+  },
+
 
   //数据查询
   _onQuery: function (DB, where, resolve, reject) {
@@ -125,17 +118,20 @@ Page({
       success: res => {
         this.setData({
           queryResult: JSON.stringify(res.data, null, 2),
-          user_goods:res.data
-          
+          usergoods:res.data,
+            modalHidden: true
+
         })
-        console.log('[数据库] [查询记录] 成功: ', res.data)
+        console.log('[数据库] [查询记录] 成功: ', this.data.usergoods)
         resolve(res.data) //promise成功测试
+        wx.hideLoading()
       },
       fail: err => {
         wx.showToast({
           icon: 'none',
           title: '查询记录失败'
         })
+      //  wx.hideLoading()
         console.error('[数据库] [查询记录] 失败：', err)
         reject() //promise失败测试
       }
