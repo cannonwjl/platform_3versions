@@ -8,6 +8,8 @@
     </view>
   </view>
 
-<view wx:else><text>
+<view wx:else class="like-container">
+<image class="headline" src="/images/my/goods.png" />
+<text>
   没任何物品
 </text></view>

@@ -68,7 +68,9 @@ Page({
         }
         else {
           if (res[0]._openid == this.data.openid) {
-          
+            this.setData({
+              modalHidden: true
+            })
           }
           
           wx.hideLoading()
@@ -94,11 +96,13 @@ Page({
   },
 
   onJumpToDetail(event) {
-    const id = event.detail._id
-    const openid = event.detail._openid
-    console.log("--id" +id+"--openid"+openid)
+    console.log(event.detail.usergooodsArray)
+    const id = event.detail.id
+    const openid = event.detail.openid
+    const usergooodsArray = event.detail.usergooodsArray
+   // console.log("--id" +id+"--openid"+openid)
     wx.navigateTo({
-      url: `/pages/course/course?id=${id}&openid=${openid}`
+      url: `/pages/course/course?id=${id}&openid=${openid}&usergooodsArray=${usergooodsArray}`
     })
   },
 
@@ -119,12 +123,12 @@ Page({
         this.setData({
           queryResult: JSON.stringify(res.data, null, 2),
           usergoods:res.data,
-            modalHidden: true
+           
 
         })
         console.log('[数据库] [查询记录] 成功: ', this.data.usergoods)
         resolve(res.data) //promise成功测试
-        wx.hideLoading()
+       
       },
       fail: err => {
         wx.showToast({

@@ -68,6 +68,10 @@
   <view class="create">
     <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
   </view>
+  <!-- 删除 -->
+   <view class="create">
+    <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">删除</button>
+  </view>
 
   <!-- 提示信息 -->
   <modal confirm-text="确定" no-confirm no-cancel hidden="{{modalHidden}}" mask bindconfirm="modalChange">

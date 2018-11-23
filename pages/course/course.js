@@ -18,48 +18,32 @@ Page({
       updatedAT: '2016-11-00',
       price: Number,
       ACL: 0,
-      repeat: {
-        'monday': 1,
-        'tuesday': 1,
-        'wednesday': 1,
-        'thursday': 1,
-        'friday': 1,
-        'saturday': 0,
-        'sunday': 0
-      }
+
     },
     openid: '',
     userInfo: {},
     creating: false,
     button: {
-      txt: '新建'
+      txt: '新建',
+      txt1: '更改'
     },
+    buttonType: false,
     modalHidden: true
   },
-
-  onLoad: function (options) {
-    if (app.globalData.openid) {
-      this.setData({
-        openid: app.globalData.openid
-      })
-      console.log(app.globalData)
-    }
-  },
-
   // 设置物品名称
-  bindKeyInput: function (e) {
+  bindKeyInput: function(e) {
     this.setData({
       'task.goods_name': e.detail.value
     });
   },
   // 设置物品介绍
-  bindKeyInput1: function (e) {
+  bindKeyInput1: function(e) {
     this.setData({
       'task.introdution': e.detail.value
     });
   },
   //物品价格
-  bindKeyInputPrice: function (e) {
+  bindKeyInputPrice: function(e) {
     this.setData({
       'task.price': e.detail.value
     })
@@ -67,7 +51,7 @@ Page({
 
 
   // 设置打卡时间
-  setSignTime: function (e) {
+  setSignTime: function(e) {
     var that = this;
     var hour = ((+e.detail.value.slice(0, 2) + 24 - 2) % 24).toString();
     that.setData({
@@ -77,14 +61,14 @@ Page({
   },
 
   // 设置开始日期
-  startDateChange: function (e) {
+  startDateChange: function(e) {
     this.setData({
       'task.startDay': e.detail.value
     })
   },
 
   // 设置结束日期
-  endDateChange: function (e) {
+  endDateChange: function(e) {
     this.setData({
       'task.endDay': e.detail.value
     })
@@ -92,24 +76,24 @@ Page({
 
 
   // 隐藏提示弹层
-  modalChange: function (e) {
+  modalChange: function(e) {
     this.setData({
       modalHidden: true
     })
   },
   // 添加数据
-  onAdd: function () {
+  onAdd: function() {
     var data = new Date();
     const db = wx.cloud.database()
     db.collection('goods_table').add({
       data: {
-        goods_name: this.data.task.goods_name,        //物品名称
-        introdution: this.data.task.introdution,      //物品介绍
-        fileid: this.data.task.fileid,                //物品照片
-        createdAT: this.data.task.createdAT,          //发布时间
-        updatedAT: this.data.task.updatedAT,          //更新时间
-        price: this.data.task.price,                  //物品价格
-        ACL: this.data.task.ACL,                      //物品状态
+        goods_name: this.data.task.goods_name, //物品名称
+        introdution: this.data.task.introdution, //物品介绍
+        fileid: this.data.task.fileid, //物品照片
+        createdAT: this.data.task.createdAT, //发布时间
+        updatedAT: this.data.task.updatedAT, //更新时间
+        price: this.data.task.price, //物品价格
+        ACL: this.data.task.ACL, //物品状态
       },
       success: res => {
         wx.hideToast();
@@ -130,7 +114,7 @@ Page({
   },
 
   // 提交、检验
-  bindSubmit: function (e) {
+  bindSubmit: function(e) {
     var that = this;
     var task = this.data.task;
     var creating = this.data.creating;
@@ -151,7 +135,7 @@ Page({
 
 
   // 创建任务
-  createTask: function () {
+  createTask: function() {
     var that = this;
     var task = this.data.task;
     wx.showToast({
@@ -174,7 +158,7 @@ Page({
   },
 
   //获取本地图片信息
-  uploadImg: function () {
+  uploadImg: function() {
     // console.log("测试上传代码运行")
     wx.chooseImage({
       count: 1,
@@ -216,7 +200,7 @@ Page({
         app.globalData.fileID = res.fileID
         app.globalData.cloudPath = cloudPath
         app.globalData.imagePath = filePath
-        resolve(res.fileID)  //promise成功测试
+        resolve(res.fileID) //promise成功测试
       },
       fail: e => {
         console.error('[上传文件] 失败：', e)
@@ -224,48 +208,52 @@ Page({
           icon: 'none',
           title: '上传失败',
         })
-        reject()  //promise失败测试
+        reject() //promise失败测试
       },
       complete: () => {
         wx.hideLoading()
       }
     })
   },
-
-  onShow: function () {
+  onShow: function() {
     // 恢复新建按钮状态
     this.setData({
       'creating': false
     });
   },
-
-  onHide: function () { },
+  onHide: function() {},
 
   // 初始化设置
-  onLoad: function () {
-    var that = this;
-    var now = new Date();
-    var openId = wx.getStorageSync('openId');
-
- 
-
-    // 初始化日期
-    that.setData({
-      'task.createdAT': util.getYMD(now),
-      'task.updatedAT': util.getYMD(now)
-    });
+  onLoad: function(options) {
 
 
-    // 初始化昵称
-    app.getUserInfo(function (userInfo) {
-      //更新数据
+    if (options) {
+      console.log("this is course.js OnLoad:options:" + options.usergooodsArray.ACL)
+      console.log(options.usergooodsArray);
+      console.log(options.id);
+      console.log(options.openid);
+    } else {
+
+      var that = this;
+      var now = new Date();
+      var openId = wx.getStorageSync('openId');
+      // 初始化日期
       that.setData({
-        userInfo: userInfo
+        'task.createdAT': util.getYMD(now),
+        'task.updatedAT': util.getYMD(now)
+      });
+      // 初始化昵称
+      app.getUserInfo(function(userInfo) {
+        //更新数据
+        that.setData({
+          userInfo: userInfo
+        });
+        that.setData({
+          openId: openId
+        })
       });
 
-      that.setData({
-        openId: openId
-      })
-    });
+    }
+
   },
 })

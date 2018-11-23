@@ -33,9 +33,12 @@ Component({
    */
   methods: {
     onTap:function(event){
+     // console.log(event)
+      console.log("this is preveiw!:" + this.properties.usergoods.ACL)
       this.triggerEvent('tapping',{
-        cid:this.properties.classic.id,
-        type:this.properties.classic.type
+        usergooodsArray: this.properties.usergoods,
+        id: this.properties.usergoods._id,
+        openid: this.properties.usergoods._openid
       },{})
     }
   }
