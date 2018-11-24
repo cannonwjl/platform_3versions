@@ -1,20 +1,9 @@
 
-import {
-  ClassicModel
-} from '../../models/classic.js'
-import {
-  BookModel
-} from '../../models/book.js'
-
-import {
-  promisic
-} from '../../util/common.js'
 
 //index.js
 const app = getApp()
 
-const classicModel = new ClassicModel()
-const bookModel = new BookModel()
+
 
 Page({
 
@@ -62,7 +51,6 @@ Page({
  
     that._getOnQuery('goods_table', '')
       .then(res => {
-
         if (res == "") {
            res=""
         }
@@ -72,7 +60,6 @@ Page({
               modalHidden: true
             })
           }
-          
           wx.hideLoading()
         }
 
@@ -96,13 +83,10 @@ Page({
   },
 
   onJumpToDetail(event) {
-    console.log(event.detail.usergooodsArray)
     const id = event.detail.id
     const openid = event.detail.openid
-    const usergooodsArray = event.detail.usergooodsArray
-   // console.log("--id" +id+"--openid"+openid)
     wx.navigateTo({
-      url: `/pages/course/course?id=${id}&openid=${openid}&usergooodsArray=${usergooodsArray}`
+      url: `/pages/course/course?id=${id}&openid=${openid}`
     })
   },
 
@@ -123,8 +107,6 @@ Page({
         this.setData({
           queryResult: JSON.stringify(res.data, null, 2),
           usergoods:res.data,
-           
-
         })
         console.log('[数据库] [查询记录] 成功: ', this.data.usergoods)
         resolve(res.data) //promise成功测试

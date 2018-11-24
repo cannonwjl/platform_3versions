@@ -5,20 +5,21 @@
     <!-- 任务名称 -->
     <view class="mod t-name">
       <text class="key">物品名称</text>
-      <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="请输入物品名称" />
+      <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="{{arraytype?array[0].goods_name:task.goods_name}}" />
       <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
     </view>
     <!-- 添加价格-->
     <view class="mod t-name">
       <text class="key">物品价格</text>
-      <input bindinput="bindKeyInputPrice" class="input" maxlength="100" placeholder="请输入物品价格" />
+      <input bindinput="bindKeyInputPrice" class="input" maxlength="100" placeholder="{{arraytype?array[0].price:task.price}}" />
       <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
     </view>
 
     <!-- 添加说明 -->
     <view class="mod t-name">
       <text class="key">物品介绍</text>
-      <input bindinput="bindKeyInput1" class="input" maxlength="100" placeholder="请输入物品介绍" />
+      <input bindinput="bindKeyInput1" class="input" maxlength="100" placeholder="{{arraytype?array[0].introdution:task.introdution}}" />
+      
       <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
     </view>
   </view>
@@ -31,7 +32,7 @@
     </view>
 
 
-    <image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
+    <image class='img' wx:if="{{arraytype?array[0].fileid:img_url}}" src='{{arraytype?array[0].fileid:img_url}}'></image>
   </view>
 
 
@@ -40,8 +41,8 @@
     <view class="mod t-time">
       <view class="start">
         <text class="key">开始于</text>
-        <picker mode="date" value="{{task.createdAT}}" start="{{task.createdAT}}" bindchange="startDateChange">
-          <view class="date">{{task.createdAT}}
+        <picker mode="date" value="{{arraytype?array[0].createdAT:task.createdAT}}" start="{{arraytype?array[0].createdAT:task.createdAT}}" bindchange="startDateChange">
+          <view class="date">{{arraytype?array[0].createdAT:task.createdAT}}
             <image class="arrow-d" src="../..//images/new/arrow-d-0.png"></image>
           </view>
         </picker>
@@ -66,11 +67,11 @@
 
   <!-- 创建按钮 -->
   <view class="create">
-    <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
+    <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{arraytype?button.txt1:button.txt}}</button>
   </view>
   <!-- 删除 -->
    <view class="create">
-    <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">删除</button>
+    <button wx:if="{{arraytype? 'disabled' : ''}}" class="btn" bindtap="dropSubmit">删除</button>
   </view>
 
   <!-- 提示信息 -->

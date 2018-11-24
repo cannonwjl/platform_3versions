@@ -141,7 +141,7 @@ Page({
 
   onStudy(event) {
     wx.navigateTo({
-      url: '/pages/course/course',
+      url: `/pages/course/course?id=${false}&openid=${false}`
     })
   },
 

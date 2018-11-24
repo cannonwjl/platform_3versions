@@ -7,26 +7,29 @@ var app = getApp();
 
 Page({
   data: {
-
+    array: [],
+    arraytype: false,
     img_url: '',
     img_name: '',
     task: {
-      goods_name: '',
-      introdution: '',
+      goods_name: '请输入物品名称',
+      introdution: '请输入物品介绍',
       fileid: '',
       createdAT: '2016-11-00',
       updatedAT: '2016-11-00',
-      price: Number,
+      price: '请输入物品价格',
       ACL: 0,
 
     },
     openid: '',
+    counterId:'',
     userInfo: {},
     creating: false,
     button: {
       txt: '新建',
       txt1: '更改'
     },
+
     buttonType: false,
     modalHidden: true
   },
@@ -48,7 +51,6 @@ Page({
       'task.price': e.detail.value
     })
   },
-
 
   // 设置打卡时间
   setSignTime: function(e) {
@@ -138,23 +140,54 @@ Page({
   createTask: function() {
     var that = this;
     var task = this.data.task;
-    wx.showToast({
-      title: '新建中',
-      icon: 'loading',
-      duration: 10000
-    });
-    this._getUpimage()
-      .then(res => {
-        this.setData({
-          'task.fileid': res
+ 
+    //如arraytype为false则创建否则修改
+    if (!this.data.arraytype) {
+      wx.showToast({
+        title: '新建中',
+        icon: 'loading',
+        duration: 10000
+      });
+      this._getUpimage()
+        .then(res => {
+          that.setData({
+            'task.fileid': res
+          })
+          //this.uploadImg()
+          //cretated add database
+          this.onAdd();
+          wx.hideLoading()
+          wx.switchTab({
+            url: '/pages/my/my',
+          })
         })
-        //this.uploadImg()
-        this.onAdd();
-        wx.switchTab({
-          url: '/pages/my/my',
-        })
-      })
+      //console.log("this is onAdd()")
+      
+     
+    } else {
+      wx.showToast({
+        title: '更改中',
+        icon: 'loading',
+        duration: 10000
+      });
 
+
+      this._getUpimage()
+        .then(res => {
+          that.setData({
+            'task.fileid': res,
+            'img_url':res
+          })
+      this._onCounterInc()
+          console.log("this is_onCounterInc")
+          wx.hideLoading()
+          wx.switchTab({
+            url: '/pages/my/my',
+          })
+        })
+      
+    }
+   
   },
 
   //获取本地图片信息
@@ -225,16 +258,24 @@ Page({
 
   // 初始化设置
   onLoad: function(options) {
+    var that = this;
+    console.log(options)
+    // 初始化昵称
+    app.getUserInfo(function(userInfo) {
+      //更新数据
+      that.setData({
+        userInfo: userInfo
+      });
 
+    });
 
-    if (options) {
-      console.log("this is course.js OnLoad:options:" + options.usergooodsArray.ACL)
-      console.log(options.usergooodsArray);
+// 这部分代码判断 options.id无值 说明是新加物品
+    if (options.id == 'false') {
       console.log(options.id);
       console.log(options.openid);
-    } else {
-
-      var that = this;
+      this.setData({
+        task:this.data.task
+      })
       var now = new Date();
       var openId = wx.getStorageSync('openId');
       // 初始化日期
@@ -242,18 +283,119 @@ Page({
         'task.createdAT': util.getYMD(now),
         'task.updatedAT': util.getYMD(now)
       });
-      // 初始化昵称
-      app.getUserInfo(function(userInfo) {
-        //更新数据
-        that.setData({
-          userInfo: userInfo
-        });
-        that.setData({
-          openId: openId
-        })
-      });
-
+      return
     }
 
+// 这部分代码判断 options.id有值 说明从个人物品跳过来的  需要通过options.id查下信息显示到界面
+//并且保存下options.id值到counterId以备删除用
+    if (options.id != false) {
+      this._onQuery('goods_table', options.id)
+      this.setData({
+        counterId: options.id
+      })
+      console.log(options.id);
+      console.log(options.openid);
+      return
+    }
+   
+
+  },
+  //删除函数
+  //问题调回个人物品界面无法重新加载数 所以体验不是很好
+  //只能调个人界面
+  dropSubmit:function()
+  {
+      this._onRemove()
+    wx.switchTab({
+      url: '/pages/my/my',
+    })
+  },
+
+  //删除
+  _onRemove: function () {
+    if (this.data.counterId) {
+      const db = wx.cloud.database()
+      db.collection('goods_table').doc(this.data.counterId).remove({
+        success: res => {
+          wx.showToast({
+            title: '删除成功',
+          })
+          this.setData({
+            counterId: '',
+           
+          })
+        },
+        fail: err => {
+          wx.showToast({
+            icon: 'none',
+            title: '删除失败',
+          })
+          console.error('[数据库] [删除记录] 失败：', err)
+        }
+      })
+    } else {
+      wx.showToast({
+        title: '无记录可删，请见创建一个记录',
+      })
+    }
+  },
+  //更新用户表数据
+  _onCounterInc: function () {
+    const db = wx.cloud.database()
+    console.log(this.data)
+    db.collection('goods_table').doc(this.data.counterId).update({
+      data: {
+        goods_name: this.data.task.goods_name, //物品名称
+        introdution: this.data.task.introdution, //物品介绍
+        fileid: this.data.task.fileid, //物品照片
+        createdAT: this.data.task.createdAT, //发布时间
+        updatedAT: this.data.task.createdAT, //更新时间
+        price: this.data.task.price, //物品价格
+        ACL: this.data.task.ACL, //物品状态
+      },
+      success: res => {
+        this.setData({
+          goods_name: this.data.task.goods_name, //物品名称
+          introdution: this.data.task.introdution, //物品介绍
+          fileid: this.data.task.fileid, //物品照片
+          createdAT: this.data.task.createdAT, //发布时间
+          updatedAT: this.data.task.createdAT, //更新时间
+          price: this.data.task.price, //物品价格
+          ACL: this.data.task.ACL, //物品状态
+        })
+      },
+      fail: err => {
+        icon: 'none',
+          console.error('[数据库] [更新记录] 失败：', err)
+      }
+    })
+  },
+
+  //数据查询
+  _onQuery: function (DB, where, resolve, reject) {
+    const db = wx.cloud.database()
+    // 查询当前用户所有的 counters
+    db.collection(DB).where({
+      _id: where
+    }).get({
+      success: res => {
+        this.setData({
+          array: res.data,
+          arraytype: true
+        })
+        console.log('[数据库] [查询记录] 成功: ', res.data)
+        // resolve(res.data) //promise成功测试
+        console.log(this.data.array)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        //  wx.hideLoading()
+        console.error('[数据库] [查询记录] 失败：', err)
+        // reject() //promise失败测试
+      }
+    })
   },
 })
