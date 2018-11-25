@@ -8,7 +8,7 @@ Component({
       type:[],
    
       observer: function (book) {
-        console.log(book)
+        
       this.setData({
         book,
       })
@@ -28,9 +28,10 @@ Component({
    */
   methods: {
     onTap(event){
-      const bid = this.properties.book._id
+      const gid = this.properties.book._id
+      const gopenid=this.properties.book._openid
       wx.navigateTo({
-        url:`/pages/book-detail/book-detail?bid=${bid}`
+        url: `/pages/book-detail/book-detail?gid=${gid}&gopenid=${gopenid}`
       })
       // 降低了组件的通用性
       // 非常方便

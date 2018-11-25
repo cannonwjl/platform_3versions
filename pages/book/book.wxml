@@ -7,7 +7,7 @@
         </view>
     </view>
     <view class="sub-container" wx:if="{{usersGoodsType}}">
-        <image class="head-img" src="/images/book/quality.png" />
+        <image class="head-img"  src="/images/book/quality.png" />
         <view class="books-container">
             <block wx:key="id" wx:for="{{users_goods}}">
                 <v-book book="{{item}}" />

@@ -1,5 +1,5 @@
 <view bind:tap="onTap" class="container">
-    <image src="{{book.fileid}}"></image>
+    <image mode='aspectFill'  src="{{book.fileid}}"></image>
     <view class="description">
         <text class='title'>{{book.goods_name}}</text>
         <text class='author'>{{book.introdution}}</text>

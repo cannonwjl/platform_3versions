@@ -26,8 +26,8 @@
 }
 
 .head image {
-    width: 200rpx;
-    height: 300rpx;
+    width: 100%;
+    height: 500rpx;
     box-shadow: 2px 2px 3px #e3e3e3;
 }
 

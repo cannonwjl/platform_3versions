@@ -52,15 +52,7 @@ Page({
     })
   },
 
-  // 设置打卡时间
-  setSignTime: function(e) {
-    var that = this;
-    var hour = ((+e.detail.value.slice(0, 2) + 24 - 2) % 24).toString();
-    that.setData({
-      'task.signTime': e.detail.value,
-      'task.signEarlyTime': (hour[1] ? hour : '0' + hour) + ':' + e.detail.value.slice(3, 5)
-    });
-  },
+ 
 
   // 设置开始日期
   startDateChange: function(e) {

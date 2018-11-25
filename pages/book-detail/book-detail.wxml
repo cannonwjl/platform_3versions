@@ -1,11 +1,17 @@
 <wxs src="../../util/filter.wxs" module="util" />
 <view class="container">
     <view class="head">
-        <image src="{{book.image}}"></image>
-        <text class='title'>{{book.title}}</text>
-        <text class='author'>{{book.author}}</text>
+        <image mode="aspectFit" src="{{goodsdatas.fileid}}"></image>
+        <text class='title'>物品名字：{{goodsdatas.goods_name}}</text>
+        <text class='title'>物品价格：{{goodsdatas.price}}</text>
+        <text class='author'>更新日期：{{goodsdatas.updatedAT}}</text>
     </view>
+ 
     <view class="sub-container">
+        <text class="headline">内容简介</text>
+        <text class="content" >{{goodsdatas.introdution}}</text>
+    </view>
+       <view class="sub-container">
         <text class="headline">短评</text>
          <text class="shadow" wx:if="{{comments==false}}">还没有短评</text>
         <view class="comment-container">
@@ -17,25 +23,19 @@
         </view>
     </view>
     <view class="sub-container">
-        <text class="headline">内容简介</text>
-        <text class="content" decode="{{true}}">{{util.format(book.summary)}}</text>
-    </view>
-    <view class="sub-container">
-        <text class="headline">书本信息</text>
+        <text class="headline">展售者信息</text>
         <view class="detail-container">
             <view class="vertical description">
-                <text>出版社</text>
-                <text>出版年</text>
-                <text>页数</text>
-                <text>定价</text>
-                <text>装帧</text>
+                <text>名字</text>
+                <text>电话</text>
+                <text>地址</text>
+                <text>取件地址</text>
             </view>
             <view class="vertical">
-                <text>{{book.publisher}}</text>
-                <text>{{book.pubdate}}</text>
-                <text>{{book.pages}}</text>
-                <text>{{book.price}}</text>
-                <text>{{book.binding}}</text>
+                <text>{{userdatas.username}}</text>
+                <text>{{userdatas.tel}}</text>
+                <text>{{userdatas.address}}</text>
+                <text>{{userdatas.address1}}</text>
             </view>
         </view>
     </view>
@@ -61,7 +61,8 @@
             </v-tag>
         </block>
     </view>
-    <input bindconfirm="onPost" class="post" placeholder='短评最多12个字'></input>
+    <input bindinput="onPost" maxlength="40" class="post" placeholder='短评最多12个字'></input>
+     
 </view>
 
 <v-mask wx:if="{{posting}}"/>
