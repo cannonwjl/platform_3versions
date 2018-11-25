@@ -6,10 +6,10 @@
             <text>搜索书籍</text>
         </view>
     </view>
-    <view class="sub-container">
+    <view class="sub-container" wx:if="{{usersGoodsType}}">
         <image class="head-img" src="/images/book/quality.png" />
         <view class="books-container">
-            <block wx:key="id" wx:for="{{books}}">
+            <block wx:key="id" wx:for="{{users_goods}}">
                 <v-book book="{{item}}" />
             </block>
         </view>

@@ -4,10 +4,15 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    book:Object,
-    showLike:{
-      type:Boolean,
-      value:true
+    book:{
+      type:[],
+   
+      observer: function (book) {
+        console.log(book)
+      this.setData({
+        book,
+      })
+    }
     }
   },
 
@@ -23,7 +28,7 @@ Component({
    */
   methods: {
     onTap(event){
-      const bid = this.properties.book.id
+      const bid = this.properties.book._id
       wx.navigateTo({
         url:`/pages/book-detail/book-detail?bid=${bid}`
       })

@@ -59,7 +59,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0 90rpx;
+    padding: 0 45rpx;
 }
 
 .books-container v-book{

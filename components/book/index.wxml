@@ -1,8 +1,8 @@
 <view bind:tap="onTap" class="container">
-    <image src="{{book.image}}"></image>
+    <image src="{{book.fileid}}"></image>
     <view class="description">
-        <text class='title'>{{book.title}}</text>
-        <text class='author'>{{book.author}}</text>
+        <text class='title'>{{book.goods_name}}</text>
+        <text class='author'>{{book.introdution}}</text>
         <view wx:if="{{showLike}}" class='foot'>
             <text class="footer">{{book.fav_nums}}  喜欢</text>
         </view>

@@ -1,11 +1,9 @@
 // pages/book-detail/book-detail.js
-import {
-  BookModel
-} from '../../models/book.js'
+
 import {
   LikeModel
 } from '../../models/like.js'
-const bookModel = new BookModel()
+
 const likeModel = new LikeModel()
 
 Page({
