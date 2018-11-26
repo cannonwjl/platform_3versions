@@ -32,7 +32,7 @@
     </view>
 
 
-    <image class='img' wx:if="{{arraytype?array[0].fileid:img_url}}" src='{{arraytype?array[0].fileid:img_url}}'></image>
+    <image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
   </view>
 
 
@@ -41,8 +41,8 @@
     <view class="mod t-time">
       <view class="start">
         <text class="key">开始于</text>
-        <picker mode="date" value="{{arraytype?array[0].createdAT:task.createdAT}}" start="{{arraytype?array[0].createdAT:task.createdAT}}" bindchange="startDateChange">
-          <view class="date">{{arraytype?array[0].createdAT:task.createdAT}}
+        <picker mode="date" value="{{arraytype?array[0].createdAT:createdAT}}" start="{{arraytype?array[0].createdAT:createdAT}}" bindchange="startDateChange">
+          <view class="date">{{arraytype?array[0].createdAT:createdAT}}
             <image class="arrow-d" src="../..//images/new/arrow-d-0.png"></image>
           </view>
         </picker>

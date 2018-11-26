@@ -11,6 +11,7 @@ Page({
     arraytype: false,
     img_url: '',
     img_name: '',
+    imgtype: false,
     task: {
       goods_name: '请输入物品名称',
       introdution: '请输入物品介绍',
@@ -21,50 +22,56 @@ Page({
       ACL: 0,
 
     },
+    goods_name: '请输入物品名称', //更新数据时用
+    introdution: '请输入物品介绍', //更新数据时用
+    fileid: '', //更新数据时用
+    createdAT: '2016-11-20', //更新数据时用
+    updatedAT: '2016-11-20', //更新数据时用
+    price: '请输入物品价格', //更新数据时用
+    ACL: 0, //更新数据时用
     openid: '',
-    counterId:'',
+    counterId: '',
     userInfo: {},
     creating: false,
     button: {
       txt: '新建',
       txt1: '更改'
     },
-
     buttonType: false,
     modalHidden: true
   },
   // 设置物品名称
   bindKeyInput: function(e) {
     this.setData({
-      'task.goods_name': e.detail.value
+      'goods_name': e.detail.value
     });
   },
   // 设置物品介绍
   bindKeyInput1: function(e) {
     this.setData({
-      'task.introdution': e.detail.value
+      'introdution': e.detail.value
     });
   },
   //物品价格
   bindKeyInputPrice: function(e) {
     this.setData({
-      'task.price': e.detail.value
+      'price': e.detail.value
     })
   },
 
- 
+
 
   // 设置开始日期
   startDateChange: function(e) {
     this.setData({
-      'task.startDay': e.detail.value
+      'startDay': e.detail.value
     })
   },
 
   // 设置结束日期
   endDateChange: function(e) {
     this.setData({
-      'task.endDay': e.detail.value
+      'endDay': e.detail.value
     })
   },
 
@@ -81,13 +88,13 @@ Page({
     const db = wx.cloud.database()
     db.collection('goods_table').add({
       data: {
-        goods_name: this.data.task.goods_name, //物品名称
-        introdution: this.data.task.introdution, //物品介绍
-        fileid: this.data.task.fileid, //物品照片
-        createdAT: this.data.task.createdAT, //发布时间
-        updatedAT: this.data.task.updatedAT, //更新时间
-        price: this.data.task.price, //物品价格
-        ACL: this.data.task.ACL, //物品状态
+        goods_name: this.data.goods_name, //物品名称
+        introdution: this.data.introdution, //物品介绍
+        fileid: this.data.fileid, //物品照片
+        createdAT: this.data.createdAT, //发布时间
+        updatedAT: this.data.updatedAT, //更新时间
+        price: this.data.price, //物品价格
+        ACL: this.data.ACL, //物品状态
       },
       success: res => {
         wx.hideToast();
@@ -110,7 +117,7 @@ Page({
   // 提交、检验
   bindSubmit: function(e) {
     var that = this;
-    var task = this.data.task;
+    var task = this.data;
     var creating = this.data.creating;
     // console.log(this.data);
     if (task.name == '' || task.introdution == '' || !task.price) {
@@ -132,7 +139,7 @@ Page({
   createTask: function() {
     var that = this;
     var task = this.data.task;
- 
+
     //如arraytype为false则创建否则修改
     if (!this.data.arraytype) {
       wx.showToast({
@@ -143,7 +150,7 @@ Page({
       this._getUpimage()
         .then(res => {
           that.setData({
-            'task.fileid': res
+            'fileid': res
           })
           //this.uploadImg()
           //cretated add database
@@ -154,32 +161,40 @@ Page({
           })
         })
       //console.log("this is onAdd()")
-      
-     
+
+
     } else {
       wx.showToast({
         title: '更改中',
         icon: 'loading',
         duration: 10000
       });
+      //如果imgtype为false 说明从开始 uploadimg长传图片没有执行过那么不要运行图片上传getupeimag函数   
+      if (this.data.imgtype) {
+        this._getUpimage()
+          .then(res => {
+            that.setData({
+              'fileid': res,
+              'img_url': res
+            })
 
 
-      this._getUpimage()
-        .then(res => {
-          that.setData({
-            'task.fileid': res,
-            'img_url':res
+            this._onCounterInc()
+            console.log("this is_onCounterInc")
+            wx.hideLoading()
+            wx.switchTab({
+              url: '/pages/my/my',
+            })
           })
-      this._onCounterInc()
-          console.log("this is_onCounterInc")
-          wx.hideLoading()
-          wx.switchTab({
-            url: '/pages/my/my',
-          })
+      } else {
+        this._onCounterInc()
+        wx.hideLoading()
+        wx.switchTab({
+          url: '/pages/my/my',
         })
-      
+      }
     }
-   
+
   },
 
   //获取本地图片信息
@@ -196,7 +211,8 @@ Page({
         console.log(cloudPath)
         this.setData({
           img_url: res.tempFilePaths[0],
-          img_name: cloudPath
+          img_name: cloudPath,
+          imgtype: true //照片点击状态判断如果点击长传照片  用来判断本照片uploadImg是否执行过
         })
       },
     })
@@ -261,25 +277,25 @@ Page({
 
     });
 
-// 这部分代码判断 options.id无值 说明是新加物品
+    // 这部分代码判断 options.id无值 说明是新加物品
     if (options.id == 'false') {
       console.log(options.id);
       console.log(options.openid);
       this.setData({
-        task:this.data.task
+        task: this.data.task
       })
       var now = new Date();
       var openId = wx.getStorageSync('openId');
       // 初始化日期
       that.setData({
-        'task.createdAT': util.getYMD(now),
-        'task.updatedAT': util.getYMD(now)
+        'createdAT': util.getYMD(now),
+        'updatedAT': util.getYMD(now)
       });
       return
     }
 
-// 这部分代码判断 options.id有值 说明从个人物品跳过来的  需要通过options.id查下信息显示到界面
-//并且保存下options.id值到counterId以备删除用
+    // 这部分代码判断 options.id有值 说明从个人物品跳过来的  需要通过options.id查下信息显示到界面
+    //并且保存下options.id值到counterId以备删除用
     if (options.id != false) {
       this._onQuery('goods_table', options.id)
       this.setData({
@@ -289,22 +305,21 @@ Page({
       console.log(options.openid);
       return
     }
-   
+
 
   },
   //删除函数
   //问题调回个人物品界面无法重新加载数 所以体验不是很好
   //只能调个人界面
-  dropSubmit:function()
-  {
-      this._onRemove()
+  dropSubmit: function() {
+    this._onRemove()
     wx.switchTab({
       url: '/pages/my/my',
     })
   },
 
   //删除
-  _onRemove: function () {
+  _onRemove: function() {
     if (this.data.counterId) {
       const db = wx.cloud.database()
       db.collection('goods_table').doc(this.data.counterId).remove({
@@ -314,7 +329,7 @@ Page({
           })
           this.setData({
             counterId: '',
-           
+
           })
         },
         fail: err => {
@@ -332,18 +347,18 @@ Page({
     }
   },
   //更新用户表数据
-  _onCounterInc: function () {
+  _onCounterInc: function() {
     const db = wx.cloud.database()
     console.log(this.data)
     db.collection('goods_table').doc(this.data.counterId).update({
       data: {
-        goods_name: this.data.task.goods_name, //物品名称
-        introdution: this.data.task.introdution, //物品介绍
-        fileid: this.data.task.fileid, //物品照片
-        createdAT: this.data.task.createdAT, //发布时间
-        updatedAT: this.data.task.createdAT, //更新时间
-        price: this.data.task.price, //物品价格
-        ACL: this.data.task.ACL, //物品状态
+        goods_name: this.data.goods_name, //物品名称
+        introdution: this.data.introdution, //物品介绍
+        fileid: this.data.fileid, //物品照片
+        //createdAT: this.data.createdAT, //发布时间不再更新
+        updatedAT: this.data.createdAT, //更新时间
+        price: this.data.price, //物品价格
+        ACL: this.data.ACL, //物品状态
       },
       success: res => {
         this.setData({
@@ -358,13 +373,13 @@ Page({
       },
       fail: err => {
         icon: 'none',
-          console.error('[数据库] [更新记录] 失败：', err)
+        console.error('[数据库] [更新记录] 失败：', err)
       }
     })
   },
 
   //数据查询
-  _onQuery: function (DB, where, resolve, reject) {
+  _onQuery: function(DB, where, resolve, reject) {
     const db = wx.cloud.database()
     // 查询当前用户所有的 counters
     db.collection(DB).where({
@@ -373,8 +388,19 @@ Page({
       success: res => {
         this.setData({
           array: res.data,
-          arraytype: true
+          arraytype: true,
+          goods_name: res.data[0].goods_name, //更新物品名称
+          introdution: res.data[0].introdution, //更新物品介绍
+          fileid: res.data[0].fileid, //更新物品照片
+          img_url: res.data[0].fileid,
+          createdAT: res.data[0].createdAT, //更新发布时间
+          updatedAT: res.data[0].createdAT, //更新时间
+          price: res.data[0].price, //更新物品价格
+          ACL: res.data[0].ACL, //更新物品状态
+
         })
+
+
         console.log('[数据库] [查询记录] 成功: ', res.data)
         // resolve(res.data) //promise成功测试
         console.log(this.data.array)
