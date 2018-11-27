@@ -43,7 +43,6 @@ Page({
   },
 
   onShow(options) {
-  
     this._onQuery('goods_table', '')
   },
 
@@ -88,9 +87,57 @@ Page({
 
   onJumpToMyGoods(){
     var usergoods=this.data.usergoods.data
-    console.log("this is onJumpTo mygoods functhoi"+usergoods)
+   // console.log("this is onJumpTo mygoods functhoi"+usergoods)
     wx.navigateTo({
       url: `/pages/goods-detail/goods-detail?usergoods=${usergoods}`,
     })
-  }
+  },
+  addTodo: function (data) {
+    console.log(data);
+    new Todo({
+      nickName: data.userInfo.nickName,
+      avatarUrl: data.userInfo.avatarUrl,
+      language: data.userInfo.language,
+    }).save().then(console.log).catch(console.error);
+  },
+
+
+  userAuthorized1() {
+    promisic(wx.getSetting)()
+      .then(data => {
+        if (data.authSetting['scope.userInfo']) {
+          return promisic(wx.getUserInfo)()
+        }
+        return false
+      })
+      .then(data => {
+        if (!data) return
+        this.setData({
+          authorized: true,
+          userInfo: data.userInfo
+        })
+        console.log(data);
+      })
+  },
+
+
+  userAuthorized() {
+    wx.getSetting({
+      success: data => {
+        if (data.authSetting['scope.userInfo']) {
+
+          wx.getUserInfo({
+            success: data => {
+              this.setData({
+                authorized: true,
+                userInfo: data.userInfo
+              })
+              this.addTodo(data);
+            }
+
+          })
+        }
+      }
+    })
+  },
 })

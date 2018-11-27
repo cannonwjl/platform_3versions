@@ -24,6 +24,9 @@ Page({
     this._onQuery('goods_table', '')
     // id
   },
+  onPullDownRefresh(){
+    this._onQuery('goods_table', '')
+  },
 
   onSearching(event){
     this.setData({

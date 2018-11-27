@@ -33,6 +33,7 @@ Component({
   data: {
     historyWords: [],
     hotWords: [],
+    usergoods:[],
     searching: false,
     q: '',
     loading: false,
@@ -87,20 +88,21 @@ Component({
     },
 
     onConfirm(event) {
+      
       this._showResult()
       this._showLoadingCenter()
       // this.initialize() 
       const q = event.detail.value || event.detail.text
+      this._onQuery('goods_table',q)
       this.setData({
         q
       })
-      bookModel.search(0, q)
-        .then(res => {
-          this.setMoreData(res.books)
-          this.setTotal(res.total)
+      
+          this.setMoreData(q)
+          
           keywordModel.addToHistory(q)
           this._hideLoadingCenter()
-        })
+        
     },
 
     _showLoadingCenter() {
@@ -126,13 +128,38 @@ Component({
         searching: false,
         q: ''
       })
-    }
+    },
 
     // onReachBottom(){
     //   console.log(123123)
     // }
 
     // scroll-view | Page onReachBottom
-
+    _onQuery: function (DB, where) {
+      const db = wx.cloud.database()
+      const _=db.command
+      // 查询当前用户所有的 counters
+      db.collection(DB).where({
+        goods_name: where,
+    
+      }).get({
+        success: res => {
+          this.setData({
+            
+            usergoods: res.data,
+          })
+          console.log('[数据库] [查询记录]这里是搜索界面 成功: ', res.data)
+        },
+        fail: err => {
+          wx.showToast({
+            icon: 'none',
+            title: '查询记录失败'
+          })
+        
+          console.error('[数据库] [查询记录] 失败：', err)
+         
+        }
+      })
+    },
   }
 })

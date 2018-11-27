@@ -36,7 +36,10 @@ Page({
       this._onQuery(DB, where, resolve, reject)
     })
   },
-
+  onPullDownRefresh()
+  {
+    this.onLoad()
+  },
 
   // 初始化设置
   onLoad: function (options) {
