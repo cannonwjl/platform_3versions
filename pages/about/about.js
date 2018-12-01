@@ -202,17 +202,9 @@ Page({
     var now = new Date();
     //对获取的openid判断 如何存在就setdata
     var appopenid =getApp().globalData.openid;
-    console.log("this is opendid"+appopenid)
-    if(appopenid=='')
-    {
-      appopenid="";
-    }else
-    {
       this.setData({
         openid: getApp().globalData.openid
       })
-      wx.hideLoading()
-    }
     const detail = this._getOnQuery('user_table', '')
     // 初始化打卡时间
     that.setData({

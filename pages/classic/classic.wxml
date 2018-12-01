@@ -20,4 +20,42 @@
 			</swiper-item>
 		</swiper>
 
+
+    <view class="section section-big discount">
+      <view class="title">优惠专区</view>
+      <image class="content" bindtap="toNearby" src="cloud://platform-5965f2.706c-platform-5965f2/a.jpg" />
+    </view>
+
+    <view class="section section-big preferred">
+      <view class="title">为你优选</view>
+      <image class="content" bindtap="toNearby" src="cloud://platform-5965f2.706c-platform-5965f2/c.jpg" />
+    </view>
+
+    <view class="section section-big special">
+      <view class="title">特色频道</view>
+      <image class="content" bindtap="toNearby" src="cloud://platform-5965f2.706c-platform-5965f2/b.jpg" />
+    </view>
+
+    <view id="nearby" class="section section-big nearby">
+      <view class="title">附近商家</view>
+      <view class="filters">
+        <view class="filter {{filterId==1?'active':''}}" data-id="1" bindtap="tapFilter">综合排序
+          <text class="v">↓</text>
+        </view>
+        <view class="filter {{filterId==2?'active':''}}" data-id="2" bindtap="tapFilter">销量最高
+          <text class="v">↓</text>
+        </view>
+        <view class="filter {{filterId==3?'active':''}}" data-id="3" bindtap="tapFilter">距离最近
+          <text class="v">↓</text>
+        </view>
+      </view>
+      <view class="shop" wx:for="{{shops}}" wx:key="id">
+        <navigator url="/page/shop/shop?id={{item.id}}">
+          <image src="{{item.img}}" />
+        </navigator>
+      </view>
+    </view>
+    <view class="loading">努力加载中…</view>
+
+
 </view>

@@ -140,8 +140,10 @@ Component({
       const _=db.command
       // 查询当前用户所有的 counters
       db.collection(DB).where({
-        goods_name: where,
-    
+        goods_name: db.RegExp({
+          regexp: where,
+          options: 'i',
+        })
       }).get({
         success: res => {
           this.setData({

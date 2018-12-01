@@ -177,8 +177,6 @@ Page({
               'fileid': res,
               'img_url': res
             })
-
-
             this._onCounterInc()
             console.log("this is_onCounterInc")
             wx.hideLoading()

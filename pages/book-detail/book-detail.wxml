@@ -33,7 +33,7 @@
             </view>
             <view class="vertical">
                 <text>{{userdatas.username}}</text>
-                <text>{{userdatas.tel}}</text>
+                <text>{{tool.highlight(userdatas.tel)}}</text>
                 <text>{{userdatas.address}}</text>
                 <text>{{userdatas.address1}}</text>
             </view>
@@ -45,7 +45,7 @@
         <text>输入短评</text>
     </view>
     <view class="like-container">
-        <v-like bind:like="onLike" class="like" like="{{likeStatus}}" count="{{likeCount}}" />
+        <v-like bind:like="onLike" class="like" like="{{likestatus}}" count="{{likeCount}}" />
     </view>
 </view>
 <view class="posting-container" wx:if="{{posting}}">
@@ -68,14 +68,10 @@
 <v-mask wx:if="{{posting}}"/>
 
 <wxs module="tool">
+
     var highlight = function(index){
-        if(index==0){
-            return 'ex-tag1'
-        }
-        if(index==1){
-            return 'ex-tag2'
-        }
-        return ''
+       
+        return ('*****')
     }
 
     module.exports = {
