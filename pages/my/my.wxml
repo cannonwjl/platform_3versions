@@ -15,7 +15,7 @@
       <text class="description">个人信息</text>
     </view>
     <view class="about-us" bind:tap="onJumpToMyGoods">
-      <text class="book-num">{{bookCount}}</text>
+      <text class="book-num">{{counts}}</text>
       <text class="description">个人物品</text>
     </view>
   </view>
@@ -23,8 +23,8 @@
   <view class="like-container">
     <image class="headline" src="/images/my/like.png" />
     <view class="preview-container">
-      <block wx:for="{{classics}}" wx:key="">
-        <v-preview bind:tapping="onJumpToDetail" class="preview" classic="{{item}}" />
+      <block wx:for="{{likegoods}}" wx:key=" " wx:for-item="i">
+        <v-preview bind:tapping="onJumpToDetail" class="preview" classic="{{item[i]}}" />
       </block>
     </view>
   </view>

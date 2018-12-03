@@ -11,7 +11,7 @@ Component({
       this.setData({
         usergoods,
       })
-      
+      console.log(usergoods)
     }
     }
    

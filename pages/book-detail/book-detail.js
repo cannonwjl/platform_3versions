@@ -20,7 +20,8 @@ Page({
     likestatus: false,
     likeCount: 0,
     posting: false,
-    counterId: ''
+    counterId: '',
+    counts:null
   },
 
   /**
@@ -42,7 +43,7 @@ Page({
     const usersdata = this._getOnQuery('user_table', openid)
     const goodsdata = this._getOnQuery('goods_table', id)
     const likedata = this._getOnQuery('favorites', appopenid)
-
+    
     Promise.all([goodsdata, usersdata, likedata])
       .then(res => {
         console.log(res[0].data[0])
@@ -169,7 +170,7 @@ Page({
             console.log(res)
             this.setData({
               likestatus: false,
-              createId: ""
+              counterId:""
             })
             
           }else
@@ -177,30 +178,49 @@ Page({
            // console.log(res.data[0].likestatus)
             this.setData({
               likestatus: res.data[0].likestatus,
-              createId: res.data[0]._id
+              counterId: res.data[0]._id
             })
             
           }
-         
-          console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
-          
-          wx.hideLoading()
-        },
-        fail: err => {
-          this.setData({
-            likestatus: false,
-            createId: res._id
-          })
-          wx.showToast({
-            icon: 'none',
-            title: '查询记录失败'
-          })
-          //  wx.hideLoading()
-          console.error('[数据库] [查询记录] 失败：', err)
-          reject() //promise失败测试
         }
       })
-    }
+          //这里再查一遍 查这个表里多少人喜欢这个物品
+          db.collection(DB).where({
+            goods_id: goodsid
+          }).get({
+            success: res => {
+
+              if (res == null) {
+                console.log(res)
+                this.setData({
+                  counts: 0
+                })
+
+              } else {
+                // console.log(res.data[0].likestatus)
+                console.log(res)
+                this.setData({
+                  counts: res.data.length
+                })
+
+              }
+
+              console.log('[数据库] [查询记录] 成功: ', DB + "喜欢数 " + res.data.length)
+
+              wx.hideLoading()
+            },
+            fail: err => {
+              this.setData({
+                counts:0
+              })
+              
+              //  wx.hideLoading()
+              
+            }
+          })
+        }  
+
+
 
   },
   /**
@@ -217,8 +237,29 @@ Page({
       data: {
         goods_id: this.data.goodsdatas._id, //物品ID
         likestatus: true, //喜欢状态
+        goods_info:{
+         
+          goods_openid: this.data.goodsdatas._openid,
+          fileid: this.data.goodsdatas.fileid,
+          updatedAT: this.data.goodsdatas.upadatedAT,
+          name: this.data.goodsdatas.goods_name,
+          introdution: this.data.goodsdatas.introdution,
+          price: this.data.goodsdatas.price,
+        },
+        user_info:{
+          usernames:this.data.userdatas.username,
+          tel: this.data.userdatas.tel,
+          address: this.data.userdatas.address,
+          address1: this.data.userdatas.address1
+        }
+
+          
+         
+        // 为待办事项添加一个地理位置（113°E，23°N）
+    //location: new db.Geo.Point(113, 23),
       },
       success: res => {
+        
         this.setData({
           counterId: res._id
         })
@@ -245,7 +286,7 @@ Page({
       db.collection('favorites').doc(this.data.counterId).remove({
         success: res => {
           wx.showToast({
-            title: '删除成功',
+            title: '取消成功',
           })
           this.setData({
             counterId: '',

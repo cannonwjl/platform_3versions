@@ -11,38 +11,71 @@ Page({
     bookCount: 0,
     classics: null,
     todos_user: [],
+    likegoods:[],
+    _openid:'',
     usergoods:[],
-    _openid:''
+    counts:null
   },
   //查询个人物品
   _onQuery: function (DB, where) {
     const db = wx.cloud.database()
     // 查询当前用户所有的 counters
-    db.collection(DB).where({
-      _openid: getApp().globalData.openid
-    }).get({
-      success: res => {
-        this.setData({
-          usergoods: res
+    if (DB =="favorites")
+    {
+      db.collection(DB).where({
+        _openid: getApp().globalData.openid
+      }).get({
+        success: res => {
+          this.setData({
+            likegoods: res
 
-        })
-        console.log('[数据库] [查询记录] 成功: ', res.data)
-        
-        // wx.hideLoading()
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-        //  wx.hideLoading()
-        console.error('[数据库] [查询记录] 失败：', err)
-       
-      }
-    })
+          })
+          console.log('[数据库] [查询记录] 成功: ', res.data)
+
+          // wx.hideLoading()
+        },
+        fail: err => {
+          wx.showToast({
+            icon: 'none',
+            title: '查询记录失败'
+          })
+          //  wx.hideLoading()
+          console.error('[数据库] [查询记录] 失败：', err)
+
+        }
+      })
+    }
+    else if(DB=="goods_table")
+    {
+      //console.log(DB)
+      db.collection(DB).where({
+        _openid: getApp().globalData.openid
+      }).get({
+        success: res => {
+          this.setData({
+            usergoods: res,
+            counts: res.data.length
+          })
+          console.log('[数据库] [查询记录] 成功 个数是: ', res.data.length)
+
+          // wx.hideLoading()
+        },
+        fail: err => {
+          wx.showToast({
+            icon: 'none',
+            title: '查询记录失败'
+          })
+          //  wx.hideLoading()
+          console.error('[数据库] [查询记录] 失败：', err)
+
+        }
+      })
+    }
+    
   },
 
   onShow(options) {
+    this._onQuery('favorites', '')
     this._onQuery('goods_table', '')
   },
 
@@ -86,10 +119,10 @@ Page({
   },
 
   onJumpToMyGoods(){
-    var usergoods=this.data.usergoods.data
+   // var usergoods=this.data.usergoods.data
    // console.log("this is onJumpTo mygoods functhoi"+usergoods)
     wx.navigateTo({
-      url: `/pages/goods-detail/goods-detail?usergoods=${usergoods}`,
+      url: `/pages/goods-detail/goods-detail`,
     })
   },
   addTodo: function (data) {

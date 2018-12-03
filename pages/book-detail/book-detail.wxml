@@ -45,7 +45,7 @@
         <text>输入短评</text>
     </view>
     <view class="like-container">
-        <v-like bind:like="onLike" class="like" like="{{likestatus}}" count="{{likeCount}}" />
+        <v-like bind:like="onLike" class="like" like="{{likestatus}}" count="{{counts}}" />
     </view>
 </view>
 <view class="posting-container" wx:if="{{posting}}">
