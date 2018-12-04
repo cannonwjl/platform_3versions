@@ -11,10 +11,11 @@ Page({
     bookCount: 0,
     classics: null,
     todos_user: [],
+    favorites_goods:[],
     likegoods:[],
     _openid:'',
     usergoods:[],
-    counts:null
+    counts:null    //用于计算个人物品数
   },
   //查询个人物品
   _onQuery: function (DB, where) {
@@ -27,7 +28,7 @@ Page({
       }).get({
         success: res => {
           this.setData({
-            likegoods: res
+            favorites_goods: res.data
 
           })
           console.log('[数据库] [查询记录] 成功: ', res.data)
@@ -53,7 +54,7 @@ Page({
       }).get({
         success: res => {
           this.setData({
-            usergoods: res,
+            likegoods: res.data,
             counts: res.data.length
           })
           console.log('[数据库] [查询记录] 成功 个数是: ', res.data.length)
@@ -111,10 +112,11 @@ Page({
   },
 
   onJumpToDetail(event) {
-    const cid = event.detail.cid
-    const type = event.detail.type
+    const gid = event.detail.gid
+    const gopenid = getApp().globalData.openid
+    const type=100  //用来区分是从哪里去的详情界面
     wx.navigateTo({
-      url: `/pages/classic-detail/classic-detail?cid=${cid}&type=${type}`
+      url: `/pages/book-detail/book-detail?gid=${gid}&gopenid=${gopenid}&type=${type}`
     })
   },
 

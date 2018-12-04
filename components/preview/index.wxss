@@ -19,7 +19,7 @@
   margin-left:20rpx;
   margin-top:-2rpx;
   height:40rpx;  
-  width:72rpx ;
+  width:144rpx ;
   font-size:24rpx;
   background-color:#f7f7f7 !important;
 }

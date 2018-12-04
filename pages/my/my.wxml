@@ -23,8 +23,8 @@
   <view class="like-container">
     <image class="headline" src="/images/my/like.png" />
     <view class="preview-container">
-      <block wx:for="{{likegoods}}" wx:key=" " wx:for-item="i">
-        <v-preview bind:tapping="onJumpToDetail" class="preview" classic="{{item[i]}}" />
+      <block wx:for="{{favorites_goods}}" wx:key=" " >
+        <v-preview bind:tapping="onJumpToDetail" class="preview" classic="{{item}}" />
       </block>
     </view>
   </view>

@@ -6,9 +6,7 @@ Component({
   properties: {
     book:{
       type:[],
-   
       observer: function (book) {
-        
       this.setData({
         book,
       })
@@ -30,8 +28,9 @@ Component({
     onTap(event){
       const gid = this.properties.book._id
       const gopenid=this.properties.book._openid
+      const type=50 //用来确定是哪个界面传的参数
       wx.navigateTo({
-        url: `/pages/book-detail/book-detail?gid=${gid}&gopenid=${gopenid}`
+        url: `/pages/book-detail/book-detail?gid=${gid}&gopenid=${gopenid}&type=${type}`
       })
       // 降低了组件的通用性
       // 非常方便

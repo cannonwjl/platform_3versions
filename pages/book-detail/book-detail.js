@@ -32,6 +32,7 @@ Page({
   onLoad: function(options) {
     wx.showLoading()
     const id = options.gid
+    console.log(options)
     //在这里进行setdata 存下id用来查找收藏
     this.setData({
       goodsid: id, //查到本物品后存下ID用来查找喜欢ID是否存在

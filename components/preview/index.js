@@ -8,10 +8,11 @@ Component({
 
     classic: {
       type: Object,
-      observer: function(newVal) {
-         console.log( "this is preview "+newVal)
-         
-       
+      observer: function (classic) {
+       // console.log("this is preview " + classic)
+        this.setData({
+          classic: classic,
+        })
       }
     }
   },
@@ -20,7 +21,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-    typeText:''
+    classic:''
   },
 
   /**
@@ -28,8 +29,9 @@ Component({
    */
   methods: {
     onTap:function(event){
+      console.log("this is preiew")
       this.triggerEvent('tapping',{
-        cid:this.properties.classic,
+        gid:this.properties.classic.goods_id,
         
       },{})
     }
