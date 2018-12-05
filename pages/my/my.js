@@ -31,7 +31,7 @@ Page({
             favorites_goods: res.data
 
           })
-          console.log('[数据库] [查询记录] 成功: ', res.data)
+         // console.log('[数据库] [查询记录] 成功: ', res.data)
 
           // wx.hideLoading()
         },
@@ -41,7 +41,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-          console.error('[数据库] [查询记录] 失败：', err)
+        //  console.error('[数据库] [查询记录] 失败：', err)
 
         }
       })
@@ -57,7 +57,7 @@ Page({
             likegoods: res.data,
             counts: res.data.length
           })
-          console.log('[数据库] [查询记录] 成功 个数是: ', res.data.length)
+        //  console.log('[数据库] [查询记录] 成功 个数是: ', res.data.length)
 
           // wx.hideLoading()
         },
@@ -67,7 +67,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-          console.error('[数据库] [查询记录] 失败：', err)
+       //   console.error('[数据库] [查询记录] 失败：', err)
 
         }
       })
@@ -82,7 +82,7 @@ Page({
 
   getMyFavor() {
     classicModel.getMyFavor(res => {
-      console.log(res)
+      //console.log(res)
       this.setData({
         classics: res
       })
@@ -128,7 +128,7 @@ Page({
     })
   },
   addTodo: function (data) {
-    console.log(data);
+    //console.log(data);
     new Todo({
       nickName: data.userInfo.nickName,
       avatarUrl: data.userInfo.avatarUrl,

@@ -57,7 +57,7 @@ Page({
           users_goods: res.data,
           usersGoodsType: true
         })
-        console.log('[数据库] [查询记录] 成功: ', res.data)
+       // console.log('[数据库] [查询记录] 成功: ', res.data)
       
         
       },
@@ -67,7 +67,7 @@ Page({
           title: '查询记录失败'
         })
         //  wx.hideLoading()
-        console.error('[数据库] [查询记录] 失败：', err)
+      //  console.error('[数据库] [查询记录] 失败：', err)
  
       }
     })

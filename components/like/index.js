@@ -40,14 +40,14 @@ Component({
       }
       let like = this.properties.like
       let count = this.properties.count
-
+ 
       count = like?count-1:count+1
       this.setData({
         count:count,
         like:!like
       })
       // 激活
-      let behavior = this.properties.like?'like':'cancel'
+      let behavior = this.properties.like?'true':''
       this.triggerEvent('like',{
         behavior:behavior
       },{})

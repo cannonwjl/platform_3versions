@@ -29,7 +29,6 @@ Component({
    */
   methods: {
     onTap:function(event){
-      console.log("this is preiew")
       this.triggerEvent('tapping',{
         gid:this.properties.classic.goods_id,
         

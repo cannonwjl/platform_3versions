@@ -32,7 +32,7 @@ Page({
   onLoad: function(options) {
     wx.showLoading()
     const id = options.gid
-    console.log(options)
+    console.log(options.type)
     //在这里进行setdata 存下id用来查找收藏
     this.setData({
       goodsid: id, //查到本物品后存下ID用来查找喜欢ID是否存在
@@ -58,13 +58,23 @@ Page({
       })
   },
 
+  ontel(evemt){
+    console.log("this is ontel")
+    wx.makePhoneCall({
+      phoneNumber: this.data.userdatas.tel //仅为示例，并非真实的电话号码
+    })
+  },
+
+  onpay(evemt) {
+    console.log("this is onpay")
+  },
   onLike(event) {
     const like_or_cancel = event.detail.behavior
-    // this.setData({
-    //   likestatus:like_or_cancel
-    // })
-    console.log(like_or_cancel)
-    if (like_or_cancel == "like") {
+    this.setData({
+      likestatus: like_or_cancel
+    })
+    //console.log(like_or_cancel)
+    if (like_or_cancel == "true") {
       //likeModel.like(like_or_cancel, this.data.goodsid, 400)
       this._onAdd()
     } else {
@@ -118,7 +128,7 @@ Page({
         _openid: where
       }).get({
         success: res => {
-          console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
+          //console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
           resolve(res) //promise成功测试
 
         },
@@ -128,7 +138,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-          console.error('[数据库] [查询记录] 失败：', err)
+        //  console.error('[数据库] [查询记录] 失败：', err)
           reject() //promise失败测试
         }
       })
@@ -139,7 +149,7 @@ Page({
         _id: where
       }).get({
         success: res => {
-          console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
+         // console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
           resolve(res) //promise成功测试
 
         },
@@ -149,7 +159,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-          console.error('[数据库] [查询记录] 失败：', err)
+         // console.error('[数据库] [查询记录] 失败：', err)
           reject() //promise失败测试
         }
       })
@@ -190,23 +200,18 @@ Page({
             goods_id: goodsid
           }).get({
             success: res => {
-
               if (res == null) {
-                console.log(res)
                 this.setData({
                   counts: 0
                 })
 
               } else {
-                // console.log(res.data[0].likestatus)
-                console.log(res)
                 this.setData({
                   counts: res.data.length
                 })
 
               }
-
-              console.log('[数据库] [查询记录] 成功: ', DB + "喜欢数 " + res.data.length)
+            //  console.log('[数据库] [查询记录] 成功: ', DB + "喜欢数 " + res.data.length)
 
               wx.hideLoading()
             },
@@ -214,7 +219,6 @@ Page({
               this.setData({
                 counts:0
               })
-              
               //  wx.hideLoading()
               
             }
@@ -269,14 +273,14 @@ Page({
         wx.showToast({
           title: '收藏成功',
         })
-        console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+       // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
       },
       fail: err => {
         wx.showToast({
           icon: 'none',
           title: '上传失败'
         })
-        console.error('[数据库] [新增记录] 失败：', err)
+      //  console.error('[数据库] [新增记录] 失败：', err)
       }
     })
   },
