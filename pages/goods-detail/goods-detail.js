@@ -103,9 +103,15 @@ Page({
   _onQuery: function (DB, where, resolve, reject) {
     const db = wx.cloud.database()
     // 查询当前用户所有的 counters
-    db.collection(DB).where({
+    const _ = db.command
+    //查找 也存在并且没有交易过得
+    db.collection(DB).where(_.and([{
+      ACL: _.neq('2')
+    },
+    {
       _openid: this.data.openid
-    }).get({
+    }
+    ])).get({
       success: res => {
         this.setData({
           queryResult: JSON.stringify(res.data, null, 2),

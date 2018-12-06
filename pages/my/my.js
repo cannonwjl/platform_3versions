@@ -49,9 +49,14 @@ Page({
     else if(DB=="goods_table")
     {
       //console.log(DB)
-      db.collection(DB).where({
+      const _ = db.command
+      db.collection(DB).where(_.and([{
+        ACL: _.neq('2')
+      },
+      {
         _openid: getApp().globalData.openid
-      }).get({
+      }
+      ])).get({
         success: res => {
           this.setData({
             likegoods: res.data,

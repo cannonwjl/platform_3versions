@@ -21,7 +21,7 @@ Page({
     likeCount: 0,
     posting: false,
     counterId: '',
-    counts:null
+    counts: null
   },
 
   /**
@@ -44,7 +44,7 @@ Page({
     const usersdata = this._getOnQuery('user_table', openid)
     const goodsdata = this._getOnQuery('goods_table', id)
     const likedata = this._getOnQuery('favorites', appopenid)
-    
+
     Promise.all([goodsdata, usersdata, likedata])
       .then(res => {
         console.log(res[0].data[0])
@@ -58,7 +58,7 @@ Page({
       })
   },
 
-  ontel(evemt){
+  ontel(evemt) {
     console.log("this is ontel")
     wx.makePhoneCall({
       phoneNumber: this.data.userdatas.tel //仅为示例，并非真实的电话号码
@@ -67,6 +67,22 @@ Page({
 
   onpay(evemt) {
     console.log("this is onpay")
+    //var data=new Date()
+    //  console.log(data)
+    this._onAdd_pay() //生成交易记录
+    this._onCounterInc() //将书下架
+    //支付功能 
+    // wx.requestPayment({
+    //   'timeStamp':data,
+    //   'nonceStr': '1234679841564169',
+    //   'package': '',
+    //   'signType': 'MD5',
+    //   'paySign': '',
+    //   'success': function (res) {
+    //   },
+    //   'fail': function (res) {
+    //   }
+    // })
   },
   onLike(event) {
     const like_or_cancel = event.detail.behavior
@@ -138,7 +154,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-        //  console.error('[数据库] [查询记录] 失败：', err)
+          //  console.error('[数据库] [查询记录] 失败：', err)
           reject() //promise失败测试
         }
       })
@@ -149,7 +165,7 @@ Page({
         _id: where
       }).get({
         success: res => {
-         // console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
+          // console.log('[数据库] [查询记录] 成功: ', DB + " " + res)
           resolve(res) //promise成功测试
 
         },
@@ -159,7 +175,7 @@ Page({
             title: '查询记录失败'
           })
           //  wx.hideLoading()
-         // console.error('[数据库] [查询记录] 失败：', err)
+          // console.error('[数据库] [查询记录] 失败：', err)
           reject() //promise失败测试
         }
       })
@@ -169,61 +185,60 @@ Page({
       var goodsid = this.data.goodsid
       const _ = db.command
       db.collection(DB).where(_.and([{
-        goods_id:goodsid
-      },
-       {
-          _openid:where
-      }])).get({
+          goods_id: goodsid
+        },
+        {
+          _openid: where
+        }
+      ])).get({
         success: res => {
-          
-          if(res==null)
-          {
+
+          if (res == null) {
             console.log(res)
             this.setData({
               likestatus: false,
-              counterId:""
+              counterId: ""
             })
-            
-          }else
-          {
-           // console.log(res.data[0].likestatus)
+
+          } else {
+            // console.log(res.data[0].likestatus)
             this.setData({
               likestatus: res.data[0].likestatus,
               counterId: res.data[0]._id
             })
-            
+
           }
         }
       })
-          //这里再查一遍 查这个表里多少人喜欢这个物品
-          db.collection(DB).where({
-            goods_id: goodsid
-          }).get({
-            success: res => {
-              if (res == null) {
-                this.setData({
-                  counts: 0
-                })
+      //这里再查一遍 查这个表里多少人喜欢这个物品
+      db.collection(DB).where({
+        goods_id: goodsid
+      }).get({
+        success: res => {
+          if (res == null) {
+            this.setData({
+              counts: 0
+            })
 
-              } else {
-                this.setData({
-                  counts: res.data.length
-                })
+          } else {
+            this.setData({
+              counts: res.data.length
+            })
 
-              }
-            //  console.log('[数据库] [查询记录] 成功: ', DB + "喜欢数 " + res.data.length)
+          }
+          //  console.log('[数据库] [查询记录] 成功: ', DB + "喜欢数 " + res.data.length)
 
-              wx.hideLoading()
-            },
-            fail: err => {
-              this.setData({
-                counts:0
-              })
-              //  wx.hideLoading()
-              
-            }
+          wx.hideLoading()
+        },
+        fail: err => {
+          this.setData({
+            counts: 0
           })
-        }  
+          //  wx.hideLoading()
+
+        }
+      })
+    }
 
 
 
@@ -242,8 +257,8 @@ Page({
       data: {
         goods_id: this.data.goodsdatas._id, //物品ID
         likestatus: true, //喜欢状态
-        goods_info:{
-         
+        goods_info: {
+
           goods_openid: this.data.goodsdatas._openid,
           fileid: this.data.goodsdatas.fileid,
           updatedAT: this.data.goodsdatas.upadatedAT,
@@ -251,20 +266,18 @@ Page({
           introdution: this.data.goodsdatas.introdution,
           price: this.data.goodsdatas.price,
         },
-        user_info:{
-          usernames:this.data.userdatas.username,
+        user_info: {
+          usernames: this.data.userdatas.username,
           tel: this.data.userdatas.tel,
           address: this.data.userdatas.address,
           address1: this.data.userdatas.address1
         }
-
-          
-         
         // 为待办事项添加一个地理位置（113°E，23°N）
-    //location: new db.Geo.Point(113, 23),
+        //location: new db.Geo.Point(113, 23),
       },
+
       success: res => {
-        
+
         this.setData({
           counterId: res._id
         })
@@ -273,14 +286,65 @@ Page({
         wx.showToast({
           title: '收藏成功',
         })
-       // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+        // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
       },
       fail: err => {
         wx.showToast({
           icon: 'none',
           title: '上传失败'
         })
-      //  console.error('[数据库] [新增记录] 失败：', err)
+        //  console.error('[数据库] [新增记录] 失败：', err)
+      }
+    })
+  },
+  //交易记录
+  _onAdd_pay: function() {
+    var data = new Date();
+    const db = wx.cloud.database()
+    db.collection('deal_table').add({
+      data: {
+        goods_id: this.data.goodsdatas._id, //物品ID
+        sell_openid: this.data.goodsdatas._openid, //出售者ID
+        time: data, //交易时间
+
+        // 为待办事项添加一个地理位置（113°E，23°N）
+        //location: new db.Geo.Point(113, 23),
+      },
+      success: res => {
+        this.setData({
+          counterId: this.data.goodsdatas._id
+        })
+
+        wx.hideToast();
+        // 在返回结果中会包含新创建的记录的 _id
+        wx.showToast({
+          title: '收藏成功',
+        })
+        // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '上传失败'
+        })
+        //  console.error('[数据库] [新增记录] 失败：', err)
+      }
+    })
+  },
+  //更新用户表数据
+  _onCounterInc: function() {
+    const db = wx.cloud.database()
+     //console.log(this.data)
+    db.collection('goods_table').doc(this.data.goodsdatas._id).update({
+      data: {
+        ACL: '2', //物品状态
+      },
+      success: res => {
+        console.log( res)
+      },
+      fail: err => {
+        icon: 'none',
+        console.error('[数据库] [更新记录] 失败：', err)
       }
     })
   },
