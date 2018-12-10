@@ -12,12 +12,13 @@
     <text class="content">{{goodsdatas.introdution}}</text>
   </view>
   <view class="sub-container">
-    <text class="headline">短评</text>
-    <text class="shadow" wx:if="{{comments==false}}">还没有短评</text>
+    <text class="headline">[评价]</text>
+    <text class="shadow" wx:if="{{evaluate==''}}">还没有评价</text>
     <view class="comment-container">
-      <block wx:for="{{util.limit(comments, 10)}}" wx:key="content">
+      <block wx:for="{{evaluate}}" wx:key="content">
+      
         <v-tag tag-class="{{tool.highlight(index)}}" text="{{item.content}}">
-          <text class="num" slot="after">{{'+'+item.nums}}</text>
+          <!-- <text class="num" slot="after">{{'+'+item.nums}}</text> -->
         </v-tag>
       </block>
     </view>
@@ -42,7 +43,7 @@
 </view>
 <view class="post-container" hidden="{{posting}}">
   <view bind:tap="onFakePost" class="post-fake">
-    <text>输入短评</text>
+    <text>输入评论</text>
   </view>
   <view class="like-container">
     <v-like bind:like="onLike" class="like" like="{{likestatus}}" count="{{counts}}" />
@@ -57,17 +58,17 @@
 <view class="posting-container" wx:if="{{posting}}">
   <view class="post-header">
     <text wx:if="{{comments==true}}">仅可点击标签+1</text>
-    <text wx:else>暂无短评</text>
+    <text wx:else>暂无评论</text>
     <text bind:tap="onCancel" class="cancel">取消</text>
   </view>
   <view class="comment-container">
-    <block wx:for="{{util.limit(comments, 3)}}" wx:key="content">
+    <!-- <block wx:for="{{util.limit(comments, 3)}}" wx:key="content">
       <v-tag bind:tapping="onPost" tag-class="{{tool.highlight(index)}}" text="{{item.content}}">
         <text class="num" slot="after">{{'+'+item.nums}}</text>
       </v-tag>
-    </block>
+    </block> -->
   </view>
-  <input bindinput="onPost" maxlength="40" class="post" placeholder='短评最多12个字'></input>
+  <input bindinput="onPost" maxlength="40" class="post" placeholder='评论最多12个字'></input>
 
 </view>
 

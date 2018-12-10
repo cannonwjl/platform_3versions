@@ -21,7 +21,9 @@ Page({
     likeCount: 0,
     posting: false,
     counterId: '',
-    counts: null
+    counts: null,
+    textcontext:'',
+    evaluate:[]
   },
 
   /**
@@ -44,15 +46,17 @@ Page({
     const usersdata = this._getOnQuery('user_table', openid)
     const goodsdata = this._getOnQuery('goods_table', id)
     const likedata = this._getOnQuery('favorites', appopenid)
-
-    Promise.all([goodsdata, usersdata, likedata])
+    //y用物品者的id进行查找评论
+    const evaluatedata = this._getOnQuery('short_review', openid)
+    Promise.all([goodsdata, usersdata, likedata, evaluatedata])
       .then(res => {
-        console.log(res[0].data[0])
-        console.log(res[1].data[0])
+        // console.log(res[0].data[0])
+        // console.log(res[1].data[0])
+        
         this.setData({
           userdatas: res[1].data[0],
           goodsdatas: res[0].data[0],
-
+          
         })
         wx.hideLoading()
       })
@@ -100,29 +104,60 @@ Page({
   },
 
   onFakePost(event) {
-    this.setData({
-      posting: true
-    })
+
+   //这里用counterID作为判断如何它有值 说明交易完成了，那么可以对用户进行评论
+  //给其他用户作为参考
+    if (this.data.counterId!='')
+    {
+      this.setData({
+        posting: true
+      })
+    }
+    else
+    {
+      wx.showToast({
+        title: '支付过后才能评论',
+        icon: 'none'
+      })
+      return
+    }
+  
   },
 
   onCancel(event) {
+     
+     if(this.data.textcontext=='')
+     {
+       this.setData({
+         posting: false,
+         textcontext: ''
+       })
+       return
+     }
+  //console.log("this is onCancel"+this.data.textcontext)
+    this._onAdd_evaluate()
+    
     this.setData({
-      posting: false
+      posting: false,
+      textcontext:''
     })
   },
 
   onPost(event) {
     const comment = event.detail.text || event.detail.value
-    console.log(comment)
+    //console.log(comment)
     if (!comment) {
       return
     }
-
+  this.setData({
+    textcontext:comment
+  })
     if (comment.length > 12) {
       wx.showToast({
         title: '短评最多12个字',
         icon: 'none'
       })
+      
       return
     }
   },
@@ -239,6 +274,36 @@ Page({
         }
       })
     }
+    else if (DB == "short_review") {
+      resolve("promise运行成功测试+运行了shortreveiw") //promise成功测试  没有查到数据也算失败也要返回
+      //通过 _id查找物品信息
+      var goodsid = this.data.goodsid
+      const _ = db.command
+      db.collection(DB).where(
+        {
+          _openid: where
+        }
+      ).get({
+        success: res => {
+
+          if (res == null) {
+            console.log(res)
+            this.setData({
+              evaluate: ""
+             
+            })
+
+          } else {
+            console.log("this is short_review!!:")
+            console.log(res.data)
+            this.setData({
+              evaluate:res.data
+            })
+
+          }
+        }
+      })
+    }
 
 
 
@@ -275,9 +340,7 @@ Page({
         // 为待办事项添加一个地理位置（113°E，23°N）
         //location: new db.Geo.Point(113, 23),
       },
-
       success: res => {
-
         this.setData({
           counterId: res._id
         })
@@ -306,7 +369,6 @@ Page({
         goods_id: this.data.goodsdatas._id, //物品ID
         sell_openid: this.data.goodsdatas._openid, //出售者ID
         time: data, //交易时间
-
         // 为待办事项添加一个地理位置（113°E，23°N）
         //location: new db.Geo.Point(113, 23),
       },
@@ -319,6 +381,38 @@ Page({
         // 在返回结果中会包含新创建的记录的 _id
         wx.showToast({
           title: '收藏成功',
+        })
+        // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '上传失败'
+        })
+        //  console.error('[数据库] [新增记录] 失败：', err)
+      }
+    })
+  },
+  //评论记录
+  _onAdd_evaluate: function () {
+    var data = new Date();
+    const db = wx.cloud.database()
+    db.collection('short_review').add({
+      data: {
+        goods_id: this.data.goodsdatas._id, //物品ID
+        sell_openid: this.data.goodsdatas._openid, //出售者ID
+        time: data, //交易时间
+        content:this.data.textcontext
+        // 为待办事项添加一个地理位置（113°E，23°N）
+        //location: new db.Geo.Point(113, 23),
+      },
+      success: res => {
+         console.log(res)
+
+        wx.hideToast();
+        // 在返回结果中会包含新创建的记录的 _id
+        wx.showToast({
+          title: '评论成功',
         })
         // console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
       },
