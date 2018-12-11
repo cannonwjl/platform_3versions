@@ -284,7 +284,7 @@ Page({
       })
       var now = new Date();
       var openId = wx.getStorageSync('openId');
-      // 初始化日期
+      // 初始化日期b
       that.setData({
         'createdAT': util.getYMD(now),
         'updatedAT': util.getYMD(now)

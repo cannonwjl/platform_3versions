@@ -1,0 +1,5 @@
+<!-- <view class="icon" wx:for="{{list}}" wx:for-item="icon" wx:key="id" wx:for-index="bindex" bindtap="toNearby" data-bindex="{{bindex}}"> -->
+<block class='icon'  wx:for="{{icons}}">
+  <image src="{{icons.img}}" />
+  <text>{{icons.name}}</text>
+</block>

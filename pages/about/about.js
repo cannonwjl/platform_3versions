@@ -197,7 +197,7 @@ Page({
 
   // 初始化设置
   onLoad: function() {
-    wx.showLoading() //加载loading
+   // wx.showLoading() //加载loading
     var that = this;
     var now = new Date();
     //对获取的openid判断 如何存在就setdata

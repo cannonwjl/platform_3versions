@@ -1,7 +1,7 @@
 <wxs src="../../util/filter.wxs" module="util" />
 <view class="container">
   <view class="head">
-    <image mode="aspectFit" src="{{goodsdatas.fileid}}"></image>
+    <image mode="aspectFit" src="{{goodsdatas.fileid}}" catchtap="viewMoviePostImg"></image>
     <text class='title'>物品名字：{{goodsdatas.goods_name}}</text>
     <text class='title'>物品价格：{{goodsdatas.price}}</text>
     <text class='author'>更新日期：{{goodsdatas.updatedAT}}</text>
@@ -48,7 +48,7 @@
   <view class="like-container">
     <v-like bind:like="onLike" class="like" like="{{likestatus}}" count="{{counts}}" />
     <view class="containerimage" wx:if="{{likestatus}}" bindtap='ontel'>
-      <image class="containerpay" src='/images/book/footer-icon-04-active.png'></image>
+      <image class="containerpay" src='/images/book/tel1.png'></image>
     </view>
     <view class="containerimage" wx:if="{{likestatus}}" bindtap='onpay'>
       <image class="containerpay" src='/images/book/footer-icon-01-active.png'></image>

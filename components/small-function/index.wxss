@@ -1,0 +1,7 @@
+/* components/small-function/index.wxss */
+
+.icons {
+	height: 370rpx;
+	padding: 20rpx 10rpx;
+	padding-bottom: 0;
+}

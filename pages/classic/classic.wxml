@@ -12,8 +12,8 @@
   </swiper>
 
 		<swiper class="section icons" indicator-dots="true" autoplay="" interval="" duration="500">
-			<swiper-item wx:for="{{icons}}" wx:for-item="list" wx:key="id">
-				<view class="icon" wx:for="{{list}}" wx:for-item="icon" wx:key="id" bindtap="toNearby">
+			<swiper-item wx:for="{{icons}}"  wx:for-item="list" wx:key="id" >
+				<view class="icon" wx:for="{{list}}" wx:for-item="icon" wx:key="id" wx:for-index="bindex" bindtap="toNearby"  data-bindex="{{bindex}}">
 					<image src="{{icon.img}}"/>
 					<text>{{icon.name}}</text>
 				</view>

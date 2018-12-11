@@ -167,7 +167,14 @@ Page({
     })
   },
 
-
+  viewMoviePostImg: function (e) {
+    var src = this.data.goodsdatas.fileid
+    console.log(e)
+    wx.previewImage({
+      urls: [src],//需要预览的图片HTTP连接列表
+      current: src,//当前显示图片的hTTP连接
+    })
+  },
 
   //数据查询
   _onQuery: function(DB, where, resolve, reject) {

@@ -7,7 +7,7 @@ Page({
 
 
 data:{
-
+  icons:[],
 },
 onLoad:function()
 {
@@ -32,10 +32,28 @@ onLoad:function()
     }
   })
 },
+  toNearby:function(event)
+  {
+    
+    
+    console.log(event)
+  },
   onSwiperItemTap:function(event)
   {
     var postId = event.target.dataset.postid;
-    console.log(postId);
+    console.log(event);
+    // var src = this.data.goodsdatas.fileid
+    // console.log(event)
+    // wx.previewImage({
+    //   urls: [src],//需要预览的图片HTTP连接列表
+    //   current: src,//当前显示图片的hTTP连接
+    // })
+    wx.showToast({
+      title: '功能完善中...',
+      icon: 'loading',
+      duration: 3000
+    });
+    
   }
 
   })

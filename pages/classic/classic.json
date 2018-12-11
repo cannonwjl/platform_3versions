@@ -6,6 +6,7 @@
         "v-essay":"/components/classic/essay/index",
         "v-episode":"/components/episode/index",
         "v-navi":"/components/navi/index",
-        "v-button":"/components/image-button/index"
+        "v-button":"/components/image-button/index",
+        "v-smallfunction":"/components/small-function/index"
     }
 }
